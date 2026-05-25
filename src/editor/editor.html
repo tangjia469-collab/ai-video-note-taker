@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AI 视频笔记</title>
+    <link rel="stylesheet" href="../lib/theme.css" />
+    <link rel="stylesheet" href="./editor.css" />
+  </head>
+  <body>
+    <!-- 顶部工具栏 -->
+    <header class="toolbar">
+      <div class="brand">
+        <div class="brand-logo" id="brandLogo"></div>
+        <input
+          id="noteTitle"
+          class="note-title"
+          type="text"
+          spellcheck="false"
+          placeholder="未命名笔记"
+        />
+      </div>
+
+      <div class="status-pill" id="statusPill">
+        <span class="status-icon" id="statusIcon">
+          <span class="dot"></span>
+        </span>
+        <span id="statusText">待命</span>
+      </div>
+
+      <div class="actions">
+        <button id="btnRecord" class="btn btn-primary" title="开始录音 / 停止">
+          <span class="rec-icon" data-icon="mic" data-icon-size="16"></span>
+          <span class="rec-label">开始录音</span>
+        </button>
+        <button id="btnSave" class="icon-btn" title="保存到 Obsidian" data-icon="save" data-icon-size="18"></button>
+        <button id="btnFullscreen" class="icon-btn" title="全屏 / 退出全屏" data-icon="maximize" data-icon-size="18"></button>
+        <button id="btnSettings" class="icon-btn" title="打开设置" data-icon="settings" data-icon-size="18"></button>
+      </div>
+    </header>
+
+    <!-- 主体:左编辑 / 右预览 -->
+    <main class="main">
+      <section class="pane pane-edit">
+        <textarea
+          id="editor"
+          class="editor"
+          spellcheck="false"
+          placeholder="在这里开始记录,AI 会从你停下处接着写…"
+        ></textarea>
+        <!-- 空状态贴纸(等用户开始打字/录音后自动隐藏) -->
+        <div class="empty-overlay" id="emptyOverlay">
+          <div class="empty-mascot mascot" id="emptyMascot"></div>
+          <div class="empty-title">还没开始呢～</div>
+          <div class="empty-sub">点击上方<b style="color:var(--accent)">开始录音</b>,我帮你边听边整理 ✨</div>
+        </div>
+      </section>
+      <section class="pane pane-preview">
+        <div id="preview" class="preview"></div>
+      </section>
+    </main>
+
+    <!-- 底部:实时转录 + AI 状态 -->
+    <footer class="footer">
+      <div class="transcript-wrap">
+        <div class="transcript-label">
+          <span class="wave" id="waveIndicator" hidden>
+            <span></span><span></span><span></span><span></span><span></span>
+          </span>
+          <span>实时转录</span>
+        </div>
+        <div id="transcript" class="transcript">
+          <span class="transcript-empty">麦克风准备好之后,这里会逐字显示 ❤</span>
+        </div>
+      </div>
+      <div id="aiStatus" class="ai-status">
+        <span class="sparkle" data-icon="sparkles" data-icon-size="14"></span>
+        <span class="ai-status-text">就绪</span>
+      </div>
+    </footer>
+
+    <script type="module" src="./editor.js"></script>
+  </body>
+</html>

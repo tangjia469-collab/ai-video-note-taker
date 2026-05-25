@@ -1,0 +1,71 @@
+{
+  "manifest_version": 3,
+  "name": "AI Video Note Taker",
+  "version": "0.1.0",
+  "description": "看视频时AI辅助实时语音笔记，自动同步到Obsidian",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs",
+    "tabCapture",
+    "offscreen",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://api.anthropic.com/*",
+    "http://127.0.0.1:27123/*",
+    "http://127.0.0.1:27124/*",
+    "https://127.0.0.1:27124/*",
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "AI 视频笔记",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    }
+  },
+  "options_page": "src/options/options.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/video-detector.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/editor/editor.html",
+        "src/editor/editor.js",
+        "src/editor/editor.css",
+        "src/content/inject-toast.css",
+        "src/lib/*.js",
+        "assets/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+  "commands": {
+    "toggle-note-panel": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+N",
+        "mac": "Command+Shift+N"
+      },
+      "description": "打开/关闭AI笔记面板"
+    }
+  }
+}
