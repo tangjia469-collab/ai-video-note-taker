@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="auto">
+<head>
+  <meta charset="utf-8" />
+  <title>AI 视频笔记 — 设置</title>
+  <link rel="stylesheet" href="../lib/theme.css" />
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="hdr">
+      <div class="hdr-icon" id="hdrMascot"></div>
+      <div class="hdr-text">
+        <h1>AI 视频笔记设置</h1>
+        <p class="sub">配置 AI、语音识别与 Obsidian 同步 ✨</p>
+      </div>
+    </header>
+
+    <form id="settings-form">
+      <!-- AI -->
+      <section class="card">
+        <h2><span data-icon="sparkles" data-icon-size="18" class="card-ic"></span>AI 配置</h2>
+
+        <div class="field">
+          <label for="aiProvider">供应商模板</label>
+          <select id="aiProvider" name="aiProvider"></select>
+          <p class="hint" id="providerDesc"></p>
+        </div>
+
+        <div class="field">
+          <label for="aiApiKey">
+            API Key
+            <a id="keyDocsLink" class="key-docs" target="_blank" rel="noopener" hidden>
+              <span data-icon="link" data-icon-size="11"></span>
+              <span>申请 key</span>
+            </a>
+          </label>
+          <div class="input-with-toggle">
+            <input id="aiApiKey" name="aiApiKey" type="password" autocomplete="off" />
+            <button type="button" class="toggle-eye" data-target="aiApiKey" aria-label="显示/隐藏">
+              <span data-icon="eye" data-icon-size="14"></span>
+            </button>
+          </div>
+          <p class="hint">仅保存在本地浏览器同步存储,直接发往所选供应商。</p>
+        </div>
+
+        <div class="field">
+          <label for="aiModel">模型</label>
+          <div class="model-row">
+            <select id="aiModelSelect"></select>
+            <input id="aiModel" name="aiModel" type="text" placeholder="或手动填写模型名" />
+          </div>
+          <p class="hint">从下拉选择推荐模型,或手动输入任意模型 id。</p>
+        </div>
+
+        <details class="adv">
+          <summary>高级 · 自定义 endpoint</summary>
+          <div class="field">
+            <label for="aiProtocol">协议</label>
+            <select id="aiProtocol" name="aiProtocol">
+              <option value="anthropic">Anthropic Messages</option>
+              <option value="openai">OpenAI Chat Completions(兼容)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="aiBaseURL">Base URL</label>
+            <input id="aiBaseURL" name="aiBaseURL" type="text" placeholder="https://api.example.com/v1" />
+            <p class="hint">不带尾斜杠。OpenAI 协议会自动追加 <code>/chat/completions</code>;Anthropic 协议追加 <code>/v1/messages</code>。</p>
+          </div>
+        </details>
+
+        <div class="field test-row">
+          <button type="button" id="btn-test-ai" class="btn-secondary">
+            <span data-icon="zap" data-icon-size="14"></span>
+            <span>测试连接</span>
+          </button>
+          <span id="ai-test-result" class="test-result"></span>
+        </div>
+
+        <div class="field">
+          <label for="aiBatchSeconds">AI 整理批次秒数</label>
+          <input id="aiBatchSeconds" name="aiBatchSeconds" type="number" min="5" max="600" step="1" />
+          <p class="hint">每攒满这么多秒的语音转录就喂给 AI 整理一次。</p>
+        </div>
+
+        <div class="field">
+          <label for="aiPrompt">系统提示词</label>
+          <textarea id="aiPrompt" name="aiPrompt" rows="6"></textarea>
+        </div>
+      </section>
+
+      <!-- 语音 -->
+      <section class="card">
+        <h2><span data-icon="mic" data-icon-size="18" class="card-ic"></span>语音识别</h2>
+
+        <div class="field">
+          <label for="voiceLang">识别语言</label>
+          <select id="voiceLang" name="voiceLang">
+            <option value="zh-CN">中文(简体)</option>
+            <option value="zh-TW">中文(繁体)</option>
+            <option value="en-US">English (US)</option>
+            <option value="en-GB">English (UK)</option>
+            <option value="ja-JP">日本語</option>
+            <option value="ko-KR">한국어</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>音频来源</label>
+          <div class="radio-row">
+            <label class="radio">
+              <input type="radio" name="voiceSource" value="mic" />
+              <span>麦克风</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="voiceSource" value="tab" />
+              <span>标签页音频 <em class="exp">实验性</em></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="checkbox">
+            <input id="voiceContinuous" name="voiceContinuous" type="checkbox" />
+            <span>连续识别(中途不自动停止)</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Obsidian -->
+      <section class="card">
+        <h2><span data-icon="link" data-icon-size="18" class="card-ic"></span>Obsidian 配置</h2>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="obsidianScheme">Scheme</label>
+            <select id="obsidianScheme" name="obsidianScheme">
+              <option value="https">https</option>
+              <option value="http">http</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="obsidianPort">Port</label>
+            <input id="obsidianPort" name="obsidianPort" type="number" min="1" max="65535" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="obsidianHost">Host</label>
+          <input id="obsidianHost" name="obsidianHost" type="text" placeholder="127.0.0.1" />
+        </div>
+
+        <div class="field">
+          <label for="obsidianApiKey">API Key</label>
+          <div class="input-with-toggle">
+            <input id="obsidianApiKey" name="obsidianApiKey" type="password" placeholder="Local REST API key" autocomplete="off" />
+            <button type="button" class="toggle-eye" data-target="obsidianApiKey" aria-label="显示/隐藏">
+              <span data-icon="eye" data-icon-size="14"></span>
+            </button>
+          </div>
+          <p class="hint">在 Obsidian 中安装 Local REST API 插件后获取。</p>
+        </div>
+
+        <div class="field">
+          <label for="obsidianFolder">笔记目录</label>
+          <input id="obsidianFolder" name="obsidianFolder" type="text" />
+        </div>
+
+        <div class="field">
+          <label for="obsidianFilenameTemplate">文件名模板</label>
+          <input id="obsidianFilenameTemplate" name="obsidianFilenameTemplate" type="text" />
+          <p class="hint">支持占位符:<code>{date}</code> <code>{time}</code> <code>{title}</code> <code>{host}</code></p>
+        </div>
+
+        <div class="field test-row">
+          <button type="button" id="btn-test-obs" class="btn-secondary">
+            <span data-icon="zap" data-icon-size="14"></span>
+            <span>测试连接</span>
+          </button>
+          <span id="obs-test-result" class="test-result"></span>
+        </div>
+      </section>
+
+      <!-- 行为 -->
+      <section class="card">
+        <h2><span data-icon="settings" data-icon-size="18" class="card-ic"></span>行为</h2>
+
+        <div class="field">
+          <label class="checkbox">
+            <input id="autoPromptOnVideo" name="autoPromptOnVideo" type="checkbox" />
+            <span>检测到视频时自动询问是否打开笔记面板</span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="checkbox">
+            <input id="autoFullscreen" name="autoFullscreen" type="checkbox" />
+            <span>打开面板时自动让视频全屏(分屏体验)</span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label for="panelWidth">笔记面板宽度:<span id="panelWidthValue">480</span> px</label>
+          <input id="panelWidth" name="panelWidth" type="range" min="320" max="720" step="10" />
+        </div>
+
+        <div class="field">
+          <label for="panelTheme">主题</label>
+          <select id="panelTheme" name="panelTheme">
+            <option value="auto">跟随系统</option>
+            <option value="dark">深色</option>
+            <option value="light">奶油浅色</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- 操作 -->
+      <div class="actions">
+        <button type="submit" class="btn-primary">
+          <span data-icon="check" data-icon-size="16"></span>
+          <span>保存</span>
+        </button>
+        <button type="button" id="btn-reset" class="btn-ghost">
+          <span data-icon="refresh" data-icon-size="14"></span>
+          <span>恢复默认</span>
+        </button>
+      </div>
+
+      <div class="footer-credit">
+        <span data-icon="heart" data-icon-size="12" class="heart-ic"></span>
+        Powered by Claude · 灵感来自每一次专注的学习
+      </div>
+    </form>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>
